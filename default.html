@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<title>Scriptable Codeproject Plugin for Firefox</title>
+</head>
+
+<script>
+//getting the instance of the plugin so we can use it every time
+var PLUGIN = null;//that dosent like Chrome
+
+function init()
+{
+	try
+	{	
+		PLUGIN = document.getElementById("plugin");
+		document.getElementById("name").value = PLUGIN.Name;//getting it from WIN-API
+	}
+	catch (err) { alert(err); }
+}
+
+function Add()
+{
+	try
+	{	
+		var a1 = document.getElementById("f1").value;
+		var a2 = document.getElementById("f2").value;
+		var res = PLUGIN.Add(a1,a2);//we can also add numbers and strings (because of the plugin implementation)
+		alert( "Plugin Added result is: " + res );
+	}
+	catch (err) { alert(err); }
+}
+
+</script>
+
+<body id="bodyId" onload="init();">
+
+<center>
+<h1>NpDemo for Firefox and Chrome</h1>
+</center>
+
+<br>
+<!--embed type="application/codeproject" id="plugin"-->
+<embed type="application/x-npmydemo" width=800 height=200 id="plugin">
+<!-- <embed type="application/x-npmydemo" width=100 height=40 id="plugin-small"> -->
+
+<br>
+
+
+<br>
+
+<br>
+Name<input id="name" type="text" size="30" maxlength="30">
+
+<br>
+<br>
+Field 1<input id="f1" type="text" size="30" maxlength="30" value ="2">
+Field 2<input id="f2" type="text" size="30" maxlength="30" value ="3">
+<br>
+<input value="Add Field 1 and 2" onclick="Add()" type="button">
+
+</center>
+
+</body>
+</html>
