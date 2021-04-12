@@ -405,7 +405,8 @@ ScriptablePluginObject::HasMethod(NPIdentifier name)
   //return name == sFoo_id;
 	char *pFunc = NPN_UTF8FromIdentifier(name);
 	//is function implemented
-	if( !strcmp( "Add", pFunc ) )
+
+	if( !strcmp( "Add", pFunc ) || !strcmp("testNpnGetValue", pFunc)|| !strcmp("testNpnGetValueForURL", pFunc)|| !strcmp("testNpnSetValueForURL", pFunc))
 	{
 		return true;
 	}
@@ -502,13 +503,54 @@ ScriptablePluginObject::SetProperty(NPIdentifier name,
   return false;
 }
 
+std::string getPageUrl(NPP mNpp) {
+	NPObject *pluginObj;
+	NPN_GetValue(mNpp, NPNVWindowNPObject, &pluginObj);
+	NPIdentifier n = NPN_GetStringIdentifier("location");
+	NPVariant rval;
+	NPN_GetProperty(mNpp,pluginObj,n,&rval);
+	NPObject* locationObj = rval.value.objectValue;
+	n=NPN_GetStringIdentifier("href");
+	NPN_GetProperty(mNpp,locationObj,n,&rval);
+	return std::string(rval.value.stringValue.UTF8Characters);
+}
+
 bool
 ScriptablePluginObject::Invoke(NPIdentifier name, const NPVariant *args, uint32_t argCount, NPVariant *result)
 {
-	//kk	
 	char *pFunc = NPN_UTF8FromIdentifier(name);
-	
 	MY_LOG(pFunc);
+
+	if (!strcmp("testNpnGetValueForURL", pFunc)){
+		char* npOutString = (char *)NPN_MemAlloc(16);
+		strcpy(npOutString, "get ok");
+		STRINGZ_TO_NPVARIANT(npOutString, *result);
+		return true;
+	}
+
+	if (!strcmp("testNpnSetValueForURL", pFunc)){
+		std::string pageURL = getPageUrl(mNpp);
+		//NPN_SetValueForURL(mNpp, NPNURLVCookie, pageURL.c_str(), "hello cookie", 12);
+
+		//
+		char* npOutString = (char *)NPN_MemAlloc(16);
+		strcpy(npOutString, "set ok");
+		STRINGZ_TO_NPVARIANT(npOutString, *result);
+		return true;
+	}
+
+	if (!strcmp("testNpnGetValue", pFunc)){
+		std::string pageURL = getPageUrl(mNpp);
+		MY_LOG(pageURL.c_str());
+
+		//NPN_SetValue(mNpp, NPPVpluginWindowBool, (void *)true);
+		//NPN_SetValue(mNpp, NPPVpluginTransparentBool, (void *)true);
+
+		char* npOutString = (char *)NPN_MemAlloc(pageURL.length() + 1);
+		strcpy(npOutString, pageURL.c_str());
+		STRINGZ_TO_NPVARIANT(npOutString, *result);
+		return true;
+	}
 
 	if( !strcmp( "Add", pFunc ) )
 	{
