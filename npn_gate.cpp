@@ -323,3 +323,15 @@ void NPN_SetException(NPObject* obj, const NPUTF8 *message)
 {
   NPNFuncs.setexception(obj, message);
 }
+
+NPError NPN_SetValueForURL(NPP npp, NPNURLVariable variable, const char *url, const char *value, uint32_t len)
+{
+	return NPNFuncs.setvalueforurl(npp, variable, url, value, len);
+}
+
+
+NPError NPN_GetValueForURL(NPP npp, NPNURLVariable variable, const char *url, char **value, uint32_t *len)
+{
+	return NPNFuncs.getvalueforurl(npp, variable, url, value, len);
+}
+
