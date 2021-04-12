@@ -375,6 +375,7 @@ typedef enum {
 
 } NPNVariable;
 
+// https://wiki.mozilla.org/NPAPI:HttpOnlyCookies
 typedef enum {
   NPNURLVCookie = 501,
   NPNURLVProxy
