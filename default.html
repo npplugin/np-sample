@@ -1,19 +1,17 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-<title>Scriptable Codeproject Plugin for Firefox</title>
+<title>Plugin for Firefox and Chrome</title>
 </head>
 
 <script>
-//getting the instance of the plugin so we can use it every time
-var PLUGIN = null;//that dosent like Chrome
 
 function init()
 {
 	try
 	{	
-		PLUGIN = document.getElementById("plugin");
-		document.getElementById("name").value = PLUGIN.Name;//getting it from WIN-API
+		var plugin = document.getElementById("pluginAdd");
+		document.getElementById("name").value = plugin.Name;
 	}
 	catch (err) { alert(err); }
 }
@@ -22,43 +20,86 @@ function Add()
 {
 	try
 	{	
+		var plugin = document.getElementById("pluginAdd");
 		var a1 = document.getElementById("f1").value;
 		var a2 = document.getElementById("f2").value;
-		var res = PLUGIN.Add(a1,a2);//we can also add numbers and strings (because of the plugin implementation)
+		var res = plugin.Add(a1,a2);
 		alert( "Plugin Added result is: " + res );
 	}
 	catch (err) { alert(err); }
 }
 
+function testNpnGetValue()
+{
+	try
+	{	
+		var plugin = document.getElementById("pluginAdd");
+		var res = plugin.testNpnGetValue();
+		alert(res);
+	}
+	catch (err) { alert(err); }
+}
+
+function testNpnGetValueForURL()
+{
+	try
+	{	
+		var plugin = document.getElementById("pluginAdd");
+		var res = plugin.testNpnGetValueForURL();
+		alert(res);
+	}
+	catch (err) { alert(err); }
+}
+
+function testNpnSetValueForURL()
+{
+	try
+	{	
+		var plugin = document.getElementById("pluginAdd");
+		var res = plugin.testNpnSetValueForURL();
+		alert(res);
+	}
+	catch (err) { alert(err); }
+}
+
+
 </script>
 
 <body id="bodyId" onload="init();">
 
-<center>
+<!-- NpDemo for Firefox and Chrome -->
 <h1>NpDemo for Firefox and Chrome</h1>
-</center>
+
+<embed type="application/x-npmydemo" width=600 height=100 id="pluginAdd">
 
 <br>
-<!--embed type="application/codeproject" id="plugin"-->
-<embed type="application/x-npmydemo" width=800 height=200 id="plugin">
-<!-- <embed type="application/x-npmydemo" width=100 height=40 id="plugin-small"> -->
-
 <br>
-
-
-<br>
-
-<br>
-Name<input id="name" type="text" size="30" maxlength="30">
+User Name:&nbsp;<input id="name" type="text" size="30" maxlength="30">
 
 <br>
 <br>
 Field 1<input id="f1" type="text" size="30" maxlength="30" value ="2">
 Field 2<input id="f2" type="text" size="30" maxlength="30" value ="3">
 <br>
+<br>
 <input value="Add Field 1 and 2" onclick="Add()" type="button">
 
-</center>
+<br>
+<br>
+<input value="testNpnGetValue" onclick="testNpnGetValue()" type="button">
+
+<br>
+<br>
+<input value="testNpnGetValueForURL" onclick="testNpnGetValueForURL()" type="button">
+
+<br>
+<br>
+<input value="testNpnSetValueForURL" onclick="testNpnSetValueForURL()" type="button">
+
+
+<br>
+<br>
+<button type="button" onclick="alert(document.cookie)">read cookie by js</button>
 
 </body>
 </html>

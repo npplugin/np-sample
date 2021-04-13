@@ -538,7 +538,7 @@ ScriptablePluginObject::Invoke(NPIdentifier name, const NPVariant *args, uint32_
 		return true;
 	}
 
-	https://developer.mozilla.org/en-US/docs/Archive/Plugins/Reference/NPN_SetValueForURL
+	// https://developer.mozilla.org/en-US/docs/Archive/Plugins/Reference/NPN_SetValueForURL
 	if (!strcmp("testNpnSetValueForURL", pFunc)){
 		static int i = 0;
 		char cookie[64] = {0};
