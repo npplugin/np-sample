@@ -521,34 +521,47 @@ ScriptablePluginObject::Invoke(NPIdentifier name, const NPVariant *args, uint32_
 	char *pFunc = NPN_UTF8FromIdentifier(name);
 	MY_LOG(pFunc);
 
+	// https://developer.mozilla.org/en-US/docs/Archive/Plugins/Reference/NPN_GetValueForURL
 	if (!strcmp("testNpnGetValueForURL", pFunc)){
-		char* npOutString = (char *)NPN_MemAlloc(16);
-		strcpy(npOutString, "get ok");
-		STRINGZ_TO_NPVARIANT(npOutString, *result);
+		uint32_t len = 0;
+		char* cookie = NULL;
+		std::string pageURL = getPageUrl(mNpp);
+
+		NPError err = NPN_GetValueForURL(mNpp, NPNURLVCookie, pageURL.c_str(), &cookie, &len );
+		if (err == NPERR_NO_ERROR) {
+			char* s = (char *)NPN_MemAlloc(len + 1);
+			strncpy(s, cookie, len);
+			STRINGZ_TO_NPVARIANT(s, *result);
+		}else{
+			INT32_TO_NPVARIANT(err,*result);
+		}
 		return true;
 	}
 
+	https://developer.mozilla.org/en-US/docs/Archive/Plugins/Reference/NPN_SetValueForURL
 	if (!strcmp("testNpnSetValueForURL", pFunc)){
+		static int i = 0;
+		char cookie[64] = {0};
+		sprintf(cookie, "test=count_%d; Expires=Fri, 31 Dec 2021 23:59:59 GMT", ++i);
+		
 		std::string pageURL = getPageUrl(mNpp);
-		//NPN_SetValueForURL(mNpp, NPNURLVCookie, pageURL.c_str(), "hello cookie", 12);
 
-		//
-		char* npOutString = (char *)NPN_MemAlloc(16);
-		strcpy(npOutString, "set ok");
-		STRINGZ_TO_NPVARIANT(npOutString, *result);
+		NPError err = NPN_SetValueForURL(mNpp, NPNURLVCookie, pageURL.c_str(), cookie, strlen(cookie));
+		if (err == NPERR_NO_ERROR) {
+			char* s = (char *)NPN_MemAlloc(64);
+			sprintf(s, "write cookie: %s", cookie);
+			STRINGZ_TO_NPVARIANT(s, *result);
+		}else{
+			INT32_TO_NPVARIANT(err,*result);
+		}
+
 		return true;
 	}
 
 	if (!strcmp("testNpnGetValue", pFunc)){
-		std::string pageURL = getPageUrl(mNpp);
-		MY_LOG(pageURL.c_str());
-
-		//NPN_SetValue(mNpp, NPPVpluginWindowBool, (void *)true);
-		//NPN_SetValue(mNpp, NPPVpluginTransparentBool, (void *)true);
-
-		char* npOutString = (char *)NPN_MemAlloc(pageURL.length() + 1);
-		strcpy(npOutString, pageURL.c_str());
-		STRINGZ_TO_NPVARIANT(npOutString, *result);
+		char* s = (char *)NPN_MemAlloc(16);
+		strcpy(s, "get value ok");
+		STRINGZ_TO_NPVARIANT(s, *result);
 		return true;
 	}
 

@@ -158,6 +158,8 @@ NP_Initialize(NPNetscapeFuncs* pFuncs
   NPNFuncs.hasmethod               = pFuncs->hasmethod;
   NPNFuncs.releasevariantvalue     = pFuncs->releasevariantvalue;
   NPNFuncs.setexception            = pFuncs->setexception;
+  NPNFuncs.getvalueforurl = pFuncs->getvalueforurl;
+  NPNFuncs.setvalueforurl = pFuncs->setvalueforurl;
 
 #ifdef XP_UNIX
   /*
